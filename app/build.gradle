@@ -26,7 +26,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            buildConfigField "String", "MAP_API_KEY", "\"70f60a29-1e1d-49bb-9684-6350099e141c\""
+            buildConfigField "String", "MAP_API_KEY", "\"2a8a0a3d-5299-4a98-aa84-066164559a06\""
             debuggable true
         }
     }
