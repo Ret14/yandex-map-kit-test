@@ -1,6 +1,8 @@
 package com.example.yandexmaptest;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +11,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.app.ActivityCompat;
 
 import com.yandex.mapkit.Animation;
@@ -19,6 +22,7 @@ import com.yandex.mapkit.layers.GeoObjectTapEvent;
 import com.yandex.mapkit.layers.GeoObjectTapListener;
 import com.yandex.mapkit.location.Location;
 import com.yandex.mapkit.location.LocationListener;
+import com.yandex.mapkit.location.LocationManager;
 import com.yandex.mapkit.location.LocationStatus;
 import com.yandex.mapkit.map.CameraPosition;
 import com.yandex.mapkit.map.InputListener;
@@ -29,20 +33,50 @@ import com.yandex.mapkit.user_location.UserLocationLayer;
 import com.yandex.mapkit.user_location.UserLocationObjectListener;
 import com.yandex.runtime.image.ImageProvider;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class MapActivity extends AppCompatActivity {
     private MapView mapView;
+    private Point myLocation;
+    public static final String LATITUDE_EXTRA = "com.example.yandexmaptest.LATITUDE_EXTRA";
+    public static final String LONGITUDE_EXTRA = "com.example.yandexmaptest.LONGITUDE_EXTRA";
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MapKitFactory.initialize(this);
-
         setContentView(R.layout.activity_main);
         mapView = (MapView) findViewById(R.id.mapView);
-        mapView.getMap().move(
-                new CameraPosition(new Point(65.9667, -18.5333), 18.0f, 0.0f, 0.0f),
-                new Animation(Animation.Type.SMOOTH, 0),
-                null);
+
+        if (checkLatLongWereGiven(getIntent())) {
+            Point initPoint = new Point(getIntent().getDoubleExtra(LATITUDE_EXTRA, 0), getIntent().getDoubleExtra(LONGITUDE_EXTRA, 0));
+            drawMyLocationMark(initPoint, mapView);
+            mapView.getMap().move(
+                    new CameraPosition(initPoint, 15.0f, 0.0f, 0.0f),
+                    new Animation(Animation.Type.SMOOTH, 10),
+                    null);
+        } else {
+            LocationManager locationManager = MapKitFactory.getInstance().createLocationManager();
+            LocationListener locationListener = new LocationListener() {
+                @Override
+                public void onLocationUpdated(@NonNull Location location) {
+                    myLocation = location.getPosition();
+                    mapView.getMap().move(
+                            new CameraPosition(myLocation, 15.0f, 0.0f, 0.0f),
+                            new Animation(Animation.Type.SMOOTH, 10),
+                            null);
+                }
+
+                @Override
+                public void onLocationStatusUpdated(@NonNull LocationStatus locationStatus) {
+
+                }
+            };
+        }
+
+
         mapView.getMap();
 
         askLocationPermission();
@@ -63,7 +97,27 @@ public class MapActivity extends AppCompatActivity {
     }
 
     private void drawMyLocationMark(Point point, MapView mapview) {
-        mapview.getMap().getMapObjects().addPlacemark(point, ImageProvider.fromResource(this, R.drawable.location_img));
+        double latitude = round(point.getLatitude(), 4);
+        double longitude = round(point.getLongitude(), 4);
+        mapview.getMap().getMapObjects().addPlacemark(point, ImageProvider.fromResource(this, R.drawable.icon_location));
+        AppCompatEditText latitudeTv = findViewById(R.id.tvLatitude);
+        AppCompatEditText longitudeTv = findViewById(R.id.tvLongitude);
+        latitudeTv.setText(String.valueOf(latitude));
+        longitudeTv.setText(String.valueOf(longitude));
+        setCoordinatesResult(latitude, longitude);
+    }
+
+    private void setCoordinatesResult(double latitude, double longitude) {
+        Intent data = new Intent();
+        data.putExtra(LATITUDE_EXTRA, latitude);
+        data.putExtra(LONGITUDE_EXTRA, longitude);
+        setResult(RESULT_OK, data);
+    }
+
+    private boolean checkLatLongWereGiven(Intent intent) {
+        double latitude = intent.getDoubleExtra(LATITUDE_EXTRA, 0);
+        double longitude = intent.getDoubleExtra(LONGITUDE_EXTRA, 0);
+        return latitude + longitude != 0;
     }
 
     @Override
@@ -100,5 +154,20 @@ public class MapActivity extends AppCompatActivity {
                     0
             );
         }
+    }
+
+    public static Intent newIntent(Context packageContext, double latitude , double longitude) {
+        Intent newIntent = new Intent(packageContext, MapActivity.class);
+        newIntent.putExtra(LATITUDE_EXTRA, latitude);
+        newIntent.putExtra(LONGITUDE_EXTRA, longitude);
+        return newIntent;
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bigDecim = BigDecimal.valueOf(value);
+        bigDecim = bigDecim.setScale(places, RoundingMode.HALF_UP);
+        return bigDecim.doubleValue();
     }
 }
