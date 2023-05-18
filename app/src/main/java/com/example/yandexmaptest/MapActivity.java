@@ -53,6 +53,22 @@ public class MapActivity extends AppCompatActivity {
         askLocationPermission();
 
         MapKit mapKit = MapKitFactory.getInstance();
+        LocationListener locationListener = new LocationListener() {
+            @Override
+            public void onLocationUpdated(@NonNull Location location) {
+                myLocation = location.getPosition();
+                mapView.getMap().move(
+                        new CameraPosition(myLocation, 12.0f, 0.0f, 0.0f),
+                        new Animation(Animation.Type.SMOOTH, 2),
+                        null);
+            }
+
+            @Override
+            public void onLocationStatusUpdated(@NonNull LocationStatus locationStatus) {
+
+            }
+        };
+        findViewById(R.id.btnUpdateLocation).setOnClickListener(view -> mapKit.createLocationManager().requestSingleUpdate(locationListener));
         if (checkLatLongWereGiven(getIntent())) {
             Point initPoint = new Point(getIntent().getDoubleExtra(LATITUDE_EXTRA, 0), getIntent().getDoubleExtra(LONGITUDE_EXTRA, 0));
             drawMyLocationMark(initPoint, mapView);
@@ -60,22 +76,8 @@ public class MapActivity extends AppCompatActivity {
                     new CameraPosition(initPoint, 12.0f, 0.0f, 0.0f),
                     new Animation(Animation.Type.SMOOTH, 2),
                     null);
-        } else {
-            LocationListener locationListener = new LocationListener() {
-                @Override
-                public void onLocationUpdated(@NonNull Location location) {
-                    myLocation = location.getPosition();
-                    mapView.getMap().move(
-                            new CameraPosition(myLocation, 12.0f, 0.0f, 0.0f),
-                            new Animation(Animation.Type.SMOOTH, 2),
-                            null);
-                }
-
-                @Override
-                public void onLocationStatusUpdated(@NonNull LocationStatus locationStatus) {
-
-                }
-            };
+        }
+        else {
             mapKit.createLocationManager().requestSingleUpdate(locationListener);
         }
         mapView.getMap().addInputListener(new InputListener() {

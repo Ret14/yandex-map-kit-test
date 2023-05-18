@@ -26,7 +26,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            buildConfigField "String", "MAP_API_KEY", "\"2a8a0a3d-5299-4a98-aa84-066164559a06\""
+            buildConfigField "String", "MAP_API_KEY", "\"70f60a29-1e1d-49bb-9684-6350099e141c\""
             debuggable true
         }
     }
@@ -63,6 +63,7 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
     implementation "androidx.constraintlayout:constraintlayout:2.2.0-alpha09"
+    implementation "com.google.accompanist:accompanist-permissions:0.31.2-alpha"
 
     // Yandex Map Kit
     implementation 'com.yandex.android:maps.mobile:4.3.1-full'
