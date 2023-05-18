@@ -49,36 +49,6 @@ public class MapActivity extends AppCompatActivity {
         MapKitFactory.initialize(this);
         setContentView(R.layout.activity_main);
         mapView = (MapView) findViewById(R.id.mapView);
-
-        if (checkLatLongWereGiven(getIntent())) {
-            Point initPoint = new Point(getIntent().getDoubleExtra(LATITUDE_EXTRA, 0), getIntent().getDoubleExtra(LONGITUDE_EXTRA, 0));
-            drawMyLocationMark(initPoint, mapView);
-            mapView.getMap().move(
-                    new CameraPosition(initPoint, 15.0f, 0.0f, 0.0f),
-                    new Animation(Animation.Type.SMOOTH, 10),
-                    null);
-        } else {
-            LocationManager locationManager = MapKitFactory.getInstance().createLocationManager();
-            LocationListener locationListener = new LocationListener() {
-                @Override
-                public void onLocationUpdated(@NonNull Location location) {
-                    myLocation = location.getPosition();
-                    mapView.getMap().move(
-                            new CameraPosition(myLocation, 15.0f, 0.0f, 0.0f),
-                            new Animation(Animation.Type.SMOOTH, 10),
-                            null);
-                }
-
-                @Override
-                public void onLocationStatusUpdated(@NonNull LocationStatus locationStatus) {
-
-                }
-            };
-        }
-
-
-        mapView.getMap();
-
         askLocationPermission();
 
         MapKit mapKit = MapKitFactory.getInstance();
@@ -94,6 +64,31 @@ public class MapActivity extends AppCompatActivity {
 
             }
         });
+        if (checkLatLongWereGiven(getIntent())) {
+            Point initPoint = new Point(getIntent().getDoubleExtra(LATITUDE_EXTRA, 0), getIntent().getDoubleExtra(LONGITUDE_EXTRA, 0));
+            drawMyLocationMark(initPoint, mapView);
+            mapView.getMap().move(
+                    new CameraPosition(initPoint, 12.0f, 0.0f, 0.0f),
+                    new Animation(Animation.Type.SMOOTH, 2),
+                    null);
+        } else {
+            LocationListener locationListener = new LocationListener() {
+                @Override
+                public void onLocationUpdated(@NonNull Location location) {
+                    myLocation = location.getPosition();
+                    mapView.getMap().move(
+                            new CameraPosition(myLocation, 12.0f, 0.0f, 0.0f),
+                            new Animation(Animation.Type.SMOOTH, 2),
+                            null);
+                }
+
+                @Override
+                public void onLocationStatusUpdated(@NonNull LocationStatus locationStatus) {
+
+                }
+            };
+            mapKit.createLocationManager().requestSingleUpdate(locationListener);
+        }
     }
 
     private void drawMyLocationMark(Point point, MapView mapview) {

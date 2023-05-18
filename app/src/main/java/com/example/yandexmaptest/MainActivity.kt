@@ -66,7 +66,8 @@ fun Greeting() {
     }
     val mapIntent = MapActivity.newIntent(LocalContext.current, latitude, longitude)
 
-    Column() {
+    Column(modifier = Modifier.fillMaxSize(),
+    ) {
         Button(onClick = {
             mapLauncher.launch(mapIntent)
         }) {
