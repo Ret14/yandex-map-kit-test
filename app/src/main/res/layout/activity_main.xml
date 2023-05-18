@@ -20,36 +20,39 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Latitude: " />
+            android:text="Lat: " />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/tvLatitude"
-            android:layout_width="70dp"
+            android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:enabled="false"
             android:textSize="15sp"
-            tools:text="65.9667" />
+            tools:text="-100.9667"
+            android:textAlignment="center" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text="Longitude: " />
+            android:text="Long: " />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/tvLongitude"
-            android:layout_width="70dp"
+            android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:enabled="false"
             android:textSize="15sp"
-            tools:text="65.9667" />
+            tools:text="-165.9667"
+            android:textAlignment="center" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:background="@color/purple_700"
-            android:text="Confirm" />
+            android:text="Confirm"
+            android:id="@+id/btnConfirm"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

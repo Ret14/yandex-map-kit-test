@@ -48,22 +48,11 @@ public class MapActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         MapKitFactory.initialize(this);
         setContentView(R.layout.activity_main);
+        findViewById(R.id.btnConfirm).setOnClickListener(view -> finish());
         mapView = (MapView) findViewById(R.id.mapView);
         askLocationPermission();
 
         MapKit mapKit = MapKitFactory.getInstance();
-        mapView.getMap().addInputListener(new InputListener() {
-            @Override
-            public void onMapTap(@NonNull Map map, @NonNull Point point) {
-                map.getMapObjects().clear();
-                drawMyLocationMark(point, mapView);
-            }
-
-            @Override
-            public void onMapLongTap(@NonNull Map map, @NonNull Point point) {
-
-            }
-        });
         if (checkLatLongWereGiven(getIntent())) {
             Point initPoint = new Point(getIntent().getDoubleExtra(LATITUDE_EXTRA, 0), getIntent().getDoubleExtra(LONGITUDE_EXTRA, 0));
             drawMyLocationMark(initPoint, mapView);
@@ -89,6 +78,18 @@ public class MapActivity extends AppCompatActivity {
             };
             mapKit.createLocationManager().requestSingleUpdate(locationListener);
         }
+        mapView.getMap().addInputListener(new InputListener() {
+            @Override
+            public void onMapTap(@NonNull Map map, @NonNull Point point) {
+                map.getMapObjects().clear();
+                drawMyLocationMark(point, mapView);
+            }
+
+            @Override
+            public void onMapLongTap(@NonNull Map map, @NonNull Point point) {
+
+            }
+        });
     }
 
     private void drawMyLocationMark(Point point, MapView mapview) {
