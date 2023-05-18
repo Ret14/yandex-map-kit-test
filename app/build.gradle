@@ -62,6 +62,7 @@ dependencies {
     implementation 'androidx.compose.material:material:1.2.0'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
+    implementation "androidx.constraintlayout:constraintlayout:2.2.0-alpha09"
 
     // Yandex Map Kit
     implementation 'com.yandex.android:maps.mobile:4.3.1-full'
