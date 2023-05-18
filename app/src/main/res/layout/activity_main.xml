@@ -9,20 +9,22 @@
         android:id="@+id/linearCoordinates"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
         android:orientation="horizontal"
         android:padding="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mapView">
+        app:layout_constraintTop_toBottomOf="@id/mapView"
+        android:background="@color/black">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:text="Lat: " />
 
         <androidx.appcompat.widget.AppCompatEditText
+            android:textColor="@color/white"
             android:id="@+id/tvLatitude"
             android:layout_width="75dp"
             android:layout_height="wrap_content"
@@ -32,12 +34,14 @@
             android:textAlignment="center" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:textColor="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:text="Long: " />
 
         <androidx.appcompat.widget.AppCompatEditText
+            android:textColor="@color/white"
             android:id="@+id/tvLongitude"
             android:layout_width="75dp"
             android:layout_height="wrap_content"
@@ -52,7 +56,8 @@
             android:layout_marginStart="20dp"
             android:background="@color/purple_700"
             android:text="Confirm"
-            android:id="@+id/btnConfirm"/>
+            android:id="@+id/btnConfirm"
+            android:textColor="@color/white"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
